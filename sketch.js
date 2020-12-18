@@ -12,7 +12,8 @@ var launcher;
 var launchingForce = 100;
 
 function preload(){
-	boy = loadImage("Plucking mangoes/boy.png")
+  boy = loadImage("Plucking mangoes/boy.png")
+  treeImg = loadImage("Plucking mangoes/tree.png")
 }
 
 function setup() {
@@ -21,7 +22,15 @@ function setup() {
 	engine = Engine.create();
 	world = engine.world;
 
-	stone = new Stone(235,330,30)
+  stone = new Stone(235,330,30)
+  
+  tree  = createSprite(920,270,10,10);
+  tree.addImage(treeImg);
+  tree.scale = 0.4;
+
+  boy1 = createSprite(270,410,20,20);
+  boy1.addImage(boy);
+  boy1.scale  = 0.14;
 	
 	mango1=new Mango(1000,50,30);
 	mango2=new Mango(1070,130,30);
@@ -32,21 +41,22 @@ function setup() {
 	mango7=new Mango(850,180,40);
   mango8=new Mango(1140,180,40);
 	mango9=new Mango(940,190,40);
-	
-	ground = new Ground(600,500,width,50)
-	tree = new Tree(475,125,500,500)
-	
+  //tree = new Tree(475,125,500,500)
+  ground = new Ground(600,500,width,50)
+  //boy_obj = new Boy(210,400,200,300)
+
+ 
 	launcher=new Launcher(stone.body,{x:200,y:330})
 
-	var render = Render.create({
-		element: document.body,
-		engine: engine,
-		options: {
-		  width: 1200,
-		  height: 500,
-		  wireframes: false
-		}
-	  });
+	// var render = Render.create({
+	// 	element: document.body,
+	// 	engine: engine,
+	// 	options: {
+	// 	  width: 1200,
+	// 	  height: 500,
+	// 	  wireframes: false
+	// 	}
+	//   });
 
 
 	Engine.run(engine);
@@ -57,13 +67,15 @@ function setup() {
 function draw() {
   
   background(209, 255, 245);
+  drawSprites()
   text("Press Space to get a second Chance to Play!!",50 ,50);
-  image(boy,150,250,200,300);
+  //image(boy,150,250,200,300);
 
   ground.display();
-  tree.display();
+  //tree.display();
+  //boy_obj.display()
   stone.display();
-
+  
   mango1.display();
   mango2.display();
   mango3.display();
@@ -87,15 +99,18 @@ function draw() {
   detectcollision(stone,mango7);
   detectcollision(stone,mango8);
   detectcollision(stone,mango9);
+
  
 }
 function mouseDragged()
 {
-	Matter.Body.setPosition(stone.body, {x:mouseX, y:mouseY}) 
+  Matter.Body.setPosition(stone.body, {x:mouseX, y:mouseY})
+ 
 }
 
 function mouseReleased()
 {
+
 	launcher.fly();
 }
 
@@ -110,7 +125,9 @@ function detectcollision(lstone,lmango){
   stoneBodyPosition=lstone.body.position
 
   var distance=dist(stoneBodyPosition.x, stoneBodyPosition.y, mangoBodyPosition.x, mangoBodyPosition.y)
+  
   if(distance<=lmango.r+lstone.r){
+   
     Matter.Body.setStatic(lmango.body,false);
   }
 }
